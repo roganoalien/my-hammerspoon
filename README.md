@@ -7,13 +7,16 @@ The configuration enhances productivity through automated window management, int
 ## Repository Structure
 ```
 .
-├── custom-fns/                    # Directory containing custom function modules
-│   ├── autoKeyboardLayout.lua     # Automatic keyboard layout switching based on active application
-│   ├── cafeinaMenubar.lua        # System sleep prevention control via menubar
-│   ├── finderFns.lua             # Finder-specific window management functions
-│   ├── remap.lua                 # Core window management keyboard shortcuts
+├── custom-fns/                   # Directory containing custom function modules
+│   ├── appWindowCycler.lua       # DEPRECATED - Cycles through all opened windows from the same app
+│   ├── autoKeyboardLayout.lua    # Automatic keyboard layout switching based on active application
+│   ├── cafeinaMenubar.lua        # DEPRECATED - System sleep prevention control via menubar
+│   ├── finderFns.lua             # DEPRECATED - Finder-specific window management functions
+│   ├── moveToNextScreen.lua      # Moves to the next screen the current window
+│   ├── remap.lua                 # DEPRECATED - Core window management keyboard shortcuts
 │   ├── stateManagerMenu.lua      # System state management via menubar
-│   └── window.lua                # Extended window manipulation functions
+│   └── window.lua                # DEPRECATED - Extended window manipulation functions
+├── icons/                        # Directory storing all icons used for the spoons
 └── init.lua                      # Main configuration file and entry point
 ```
 
@@ -31,75 +34,36 @@ brew install --cask hammerspoon
 
 2. Clone this configuration:
 ```bash
-git clone https://github.com/yourusername/hammerspoon-config.git ~/.hammerspoon
+git clone https://github.com/roganoalien/my-hammerspoon.git ~/.hammerspoon
 ```
 
 3. Launch Hammerspoon and enable accessibility permissions when prompted
 
 ### Quick Start
 1. Open Hammerspoon preferences and enable "Launch Hammerspoon at login"
-2. Basic window management:
-   - `Ctrl + Alt + Cmd + Left`: Move window to left half of screen
-   - `Ctrl + Alt + Cmd + Right`: Move window to right half of screen
-   - `Ctrl + Alt + Cmd + Up`: Maximize window
-   - `Ctrl + Alt + Cmd + Down`: Center window at 75% size
+2. Basic shortcuts:
+   - `Ctrl + Cmd + Alt + k`: Toggles app change listener to change keyboar layout
+   - `Ctrl + Shift + Alt + n`: Move active window to next screen
 
-### More Detailed Examples
-1. Multi-screen window management:
-```lua
--- Move window to next screen
-hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "up", function() 
-    local win = hs.window.focusedWindow()
-    win:moveToScreen(win:screen():next())
-end)
-```
+### Details
 
-2. Keyboard Layout Switching:
-- Automatically switches between layouts based on active application
-- Menubar icon indicates current layout state
-- Toggle automatic switching with keyboard shortcut
+##### Auto Keyboard Layout
 
-### Troubleshooting
-Common Issues:
-1. Keyboard shortcuts not working:
-   - Check System Preferences > Security & Privacy > Privacy > Accessibility
-   - Ensure Hammerspoon is allowed
-   - Try restarting Hammerspoon
+1. Icons:
+- Has 6 icons, two for EN keyboard language (one for keyboard listener off and other for active), has the same behaviour for ES and JAP
 
-2. Menubar icons not appearing:
-   - Verify icon paths in configuration
-   - Check console for path-related errors
-   - Restart Hammerspoon
+2. Allowed Apps:
+- Inside `autoKeyboardLayout.lua` file theres a function named `local function isAppAllowed(appName)` which validates if the passed through app is inside the whitelist of the app and if it does returns a `true` and if not returns a `false` which will trigger the layout change to EN or ES... JAP layout does not enter the dynamics, it only shows to display which language your keyboard is currently at. 
 
-Debug Mode:
-- Open Hammerspoon console: `Help > Console`
-- Enable debug logging:
-```lua
-hs.logger.defaultLogLevel = 'debug'
-```
+##### Move To Next Screen
+1. Simple one function that gets the current active screen via `win:screen()` and gets the nextScreen via `win:screen():next()` and if there's no next screen it will end the function, otherwise will use `win:moveToScreen(nextScreen)` where nextScreen is the `win:screen():next()` stored in a var.
 
-## Data Flow
-The configuration processes user input through keyboard shortcuts and menubar interactions, triggering window management operations and system state changes.
+##### State Manager Menu
+1. Handles Icons, and turns on and off the macOS state manager with a bar menu icon and menu. Runs through two shortcuts: 1-`Turn on State Manager` and 2-`Turn off State Manager`
 
-```ascii
-User Input (Keyboard/Mouse) --> Hammerspoon Event Handlers
-            |
-            v
-    Input Processing Layer
-            |
-    +-------+-------+
-    |               |
-Window Manager  System Controls
-    |               |
-    v               v
-macOS Window API  System APIs
-```
+##### INIT LUA
+Just triggers the files and loads them. Inside has two global functions:
+- `showFullScreenText(text)` - which shows a full window inside the active window to display a message... it bugs a lot, probably due to the hammerspoon API
+- `showCenterWindow(text, duration, isAlert)` - which displays a fullscreen text message... it bugs a lot too.
 
-Component Interactions:
-1. Event handlers capture user input and route to appropriate modules
-2. Window management functions interact with macOS window APIs
-3. System control modules communicate with macOS system services
-4. Menubar items provide visual feedback and state management
-5. Keyboard layout manager monitors active applications
-6. Alert system provides visual confirmation of actions
-7. Configuration system maintains user preferences and shortcuts
+Both are not used by default. 
