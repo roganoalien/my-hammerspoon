@@ -5,29 +5,29 @@ local stateOFF = hs.image.imageFromPath("/Users/roganoalien/.hammerspoon/icons/s
 local stateIsOff = true
 local stateIcon = nil
 -- creates the global menubar menu
-stateManagerStatus = hs.menubar.new(true, "stateManagerStatus")
+local stateManagerStatus = hs.menubar.new(true, "stateManagerStatus")
 
 local function triggerState(theStatus)
 	if theStatus then
 		hs.task.new("/usr/bin/shortcuts", function(exitCode, stdOut, stdErr)
 			if exitCode == 0 then
 				-- hs.alert("State Manager is ON!! ✅")
-				-- showFullScreenText("State Manager ON!!")
+				-- ShowFullScreenText("State Manager ON!!")
 			else
 				-- hs.alert("Could not turn on the state manager!! ❌")
-				-- showFullScreenText("Error trying to turn ON state manager!!")
+				-- ShowFullScreenText("Error trying to turn ON state manager!!")
 			end
-		end, {"run", "Turn on State Manager"}):start()
+		end, { "run", "Turn on State Manager" }):start()
 	else
 		hs.task.new("/usr/bin/shortcuts", function(exitCode, stdOut, stdErr)
 			if exitCode == 0 then
 				-- hs.alert("State Manager is OFF!! ✅")
-				-- showFullScreenText("State Manager OFF!!")
+				-- ShowFullScreenText("State Manager OFF!!")
 			else
 				-- hs.alert("Could not turn off the state manager!! ❌")
-				-- showFullScreenText("Error trying to turn OFF state manager!!")
+				-- ShowFullScreenText("Error trying to turn OFF state manager!!")
 			end
-		end, {"run", "Turn off State Manager"}):start()
+		end, { "run", "Turn off State Manager" }):start()
 	end
 end
 

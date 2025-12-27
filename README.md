@@ -64,6 +64,6 @@ git clone https://github.com/roganoalien/my-hammerspoon.git ~/.hammerspoon
 ##### INIT LUA
 Just triggers the files and loads them. Inside has two global functions:
 - `showFullScreenText(text)` - which shows a full window inside the active window to display a message... it bugs a lot, probably due to the hammerspoon API
-- `showCenterWindow(text, duration, isAlert)` - which displays a fullscreen text message... it bugs a lot too.
+- `ShowCenterWindow(text, duration, isAlert)` - which displays a fullscreen text message... it bugs a lot too.
 
 Both are not used by default. 

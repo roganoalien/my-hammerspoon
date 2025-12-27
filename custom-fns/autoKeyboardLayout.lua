@@ -9,7 +9,7 @@ local keyChangeJapanese = hs.image.imageFromPath("/Users/roganoalien/.hammerspoo
 local stopKeyboardChange = false
 local currentIcon = nil
 -- creates the global menubar menu
-keyboardChangerStatus = hs.menubar.new(true, "keyboardChangerStatus")
+local keyboardChangerStatus = hs.menubar.new(true, "keyboardChangerStatus")
 
 local function alertCenteredOnWindow(message, duration)
 	local win = hs.window.frontmostWindow()
@@ -55,13 +55,13 @@ local function changeKeyboardLayout()
 	if stopKeyboardChange then
 		stopKeyboardChange = not stopKeyboardChange
 		setsMenuIcon(false)
-		hs.notify.new({title="Keyboard listener active!", informativeText="unlocked"}):send()
-		-- showCenterWindow("Kerboard listener unlocked!", 1, false)
+		hs.notify.new({ title = "Keyboard listener active!", informativeText = "unlocked" }):send()
+		-- ShowCenterWindow("Kerboard listener unlocked!", 1, false)
 	else
 		stopKeyboardChange = not stopKeyboardChange
 		setsMenuIcon(true)
-		-- showCenterWindow("Kerboard listener locked!", 1, false)
-		hs.notify.new({title="Keyboard listener locked!", informativeText="unlocked"}):send()
+		-- ShowCenterWindow("Kerboard listener locked!", 1, false)
+		hs.notify.new({ title = "Keyboard listener locked!", informativeText = "unlocked" }):send()
 	end
 end
 
@@ -74,25 +74,26 @@ end
 hs.keycodes.inputSourceChanged(callSetMenu)
 
 local function isAppAllowed(appName)
-    -- Corrected app names based on common Hammerspoon issues
-    local allowedApps = {
-        "Code",              -- Visual Studio Code (official)
-        "iTerm",             -- iTerm2
-        "Warp",              -- Warp terminal
-        "WezTerm",           -- WezTerm
-        "Ghostty",           -- Assuming this is correct
-        "Xcode",             -- Xcode
-        "Visual Studio Code" -- VSCode (full name variant)
-    }
+	-- Corrected app names based on common Hammerspoon issues
+	local allowedApps = {
+		"Code",              -- Visual Studio Code (official)
+		"iTerm",             -- iTerm2
+		"Warp",              -- Warp terminal
+		"WezTerm",           -- WezTerm
+		"Ghostty",           -- Assuming this is correct
+		"Xcode",             -- Xcode
+		"Zed",               -- Zed IDE
+		"Visual Studio Code" -- VSCode (full name variant)
+	}
 
-    -- Check if the app is in the allowed list
-    for _, app in ipairs(allowedApps) do
-        if appName == app then
-            return true
-        end
-    end
+	-- Check if the app is in the allowed list
+	for _, app in ipairs(allowedApps) do
+		if appName == app then
+			return true
+		end
+	end
 
-    return false
+	return false
 end
 
 -- IF APP MATCHES CHANGES KEYBOARD LAYOUT TO ENGLISH AND IF NOT CHANGES TO SPANISH
@@ -105,15 +106,15 @@ hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function(wind
 				-- hs.alert.closeAll()
 				-- hs.alert.show("Español", nil, hs.screen.allScreens(), 1)
 				-- alertCenteredOnWindow("Español", 1)
-				showCenterWindow("Español", 1, true)
+				ShowCenterWindow("Español", 1, true)
 				hs.keycodes.setLayout("Latin American")
 			end
 		else
-			if(current ~= "ABC") then
+			if (current ~= "ABC") then
 				-- hs.alert.closeAll()
 				-- hs.alert.show("English", nil, hs.screen.allScreens(), 1)
 				-- alertCenteredOnWindow("English", 1)
-				showCenterWindow("English", 1, true)
+				ShowCenterWindow("English", 1, true)
 				hs.keycodes.setLayout("ABC")
 			end
 		end
